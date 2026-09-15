@@ -1,5 +1,5 @@
 name: Apple TV Siri Voice Bridge
-version: "1.0.1"
+version: "1.0.2"
 slug: appletv_siri_bridge
 description: >-
   HomeKit Target Control accessory that lets Home Assistant send button presses
@@ -34,6 +34,7 @@ options:
   pincode: "031-45-154"
   bind_interface: ""
   expose_control_api: false
+  pairing_mode: false
 
 schema:
   # Shown in the Home app when pairing.
@@ -57,6 +58,13 @@ schema:
   # Siri" endpoint for anything on your LAN -- only enable it if Home Assistant
   # runs on a different machine, and firewall it if you do.
   expose_control_api: bool
+  # Turn ON before adding the accessory in the Home app, and OFF again once it
+  # is paired. The bridge repairs a dead HomeKit data stream by unpublishing and
+  # re-publishing itself, and on a fresh install it always does that 25 s after
+  # boot -- there cannot be a data stream until an Apple TV is paired as a
+  # target. That re-publish lands in the middle of Home app pairing and fails it
+  # with OSStatus -6718. This pushes the timers out of the way for an hour.
+  pairing_mode: bool
 
 # No `ports:` either. Port mapping is what bridge networking needs; with
 # host_network the bridge binds the host's interfaces directly, so declaring

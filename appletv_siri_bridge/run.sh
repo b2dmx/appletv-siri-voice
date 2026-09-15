@@ -26,5 +26,13 @@ else
     export CTRL_BIND="127.0.0.1"
 fi
 
+# See config.yaml. Recovery re-publishes the accessory, which breaks an
+# in-progress Home app pairing; hold it off while the user pairs.
+if bashio::config.true 'pairing_mode'; then
+    export HDS_BOOT_GRACE_MS=3600000
+    export HDS_WATCHDOG_MS=3600000
+    bashio::log.warning "Pairing mode ON -- HomeKit recovery is held off for 1 hour. Pair now, then turn this off and restart."
+fi
+
 bashio::log.info "Starting Apple TV Siri Voice bridge as '${HAP_NAME}'"
 exec node /app/index.js
